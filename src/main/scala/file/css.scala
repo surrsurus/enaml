@@ -3,7 +3,7 @@ package file
 /// Contains css and one method to return it
 /// Css source modified from:
 /// https://github.com/sindresorhus/github-markdown-css/blob/gh-pages/github-markdown.css
-object css {
+object CSS {
   // ...
   final val css = """      @font-face {
         font-family: octicons-link;
@@ -303,6 +303,6 @@ object css {
       }"""
   
   def getCss(): String = {
-    return css;
+    return css
   }
 }
