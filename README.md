@@ -6,7 +6,7 @@
 
 ## What is enaml then?
 
-Enaml is actually a markup translator, that uses a custom markup language (A.K.A a bad one) detailed under `examples`. It features a basic gui, and the ability to turn specified enaml/markup files into html code to view in the browser. I did it so that I could have a language that allows the user to make very quick notes for whatever setting, and have them formatted nicely to view in a web browser.
+Enaml is actually a markup translator, that uses a custom markup language detailed under `examples`. It features a basic gui, and the ability to turn specified enaml/markup files into html code to view in the browser. I did it so that I could have a language that allows the user to make very quick notes for whatever setting, and have them formatted nicely to view in a web browser.
 
 ## Note about getting this to work
 
