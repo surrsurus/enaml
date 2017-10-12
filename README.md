@@ -10,13 +10,19 @@ Enaml is actually a markup translator, that uses a custom markup language detail
 
 ## Note about getting this to work
 
-I spent 6 hours figuring out how to get a jar to compile in case if the user doesn't have scala (which 99% of them won't, 100% if you count the fact no one looks at my repositories). Basically it was beyond a nightmare. Eclipse wasn't helping, Maven wouldn't work, and the only solution was to install a custom plugin for SBT called [SBT Assembly](https://github.com/sbt/sbt-assembly) (Mad shoutout) which magically made this thing work. If you have problems getting an executable jar, please check this out. I'm also hoping the jar runs on other systems. It Works on My Machine(tm) but I can't guarentee that for all systems. All in all, Scala is fun to program in, nightmarish to deploy. If you have any problems please raise an issue.
+I spent 6 hours figuring out how to get a jar to compile in case if the user doesn't have scala. 
+
+Basically, it was beyond a nightmare. 
+
+Eclipse wasn't helping, Maven wouldn't work, and the only solution was to install a custom plugin for SBT called [SBT Assembly](https://github.com/sbt/sbt-assembly) which made this thing work. If you have problems getting an executable jar, please check this out. I'm also hoping the jar runs on other systems. It works on my machine but I can't guarentee that for all systems. All in all, Scala is fun to program in, nightmarish to deploy. 
+
+If you have any problems please raise an issue.
 
 ## Credit
 
 A big thank you to:
 
-  * [SBT Assembly](https://github.com/sbt/sbt-assembly) for literally making this work
+  * [SBT Assembly](https://github.com/sbt/sbt-assembly) for being the only thing that could build a jar
 
   * [Github Markdown CSS](https://github.com/sindresorhus/github-markdown-css) because I like the markdown CSS (and I'm lazy)
 
