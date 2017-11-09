@@ -1,0 +1,46 @@
+[Syntax by Example]
+Headings are done in markdown style
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+
+- Bulleted lists
+- are made
+- just like
+- this!
+
+> This is a block quote
+
+Normal text is just written in. Newlines are also registered, and any trailing or proceeding whitespace is removed.
+You can also have inline markup such as %bold text%, @italicized text@, _underlined text_, and `code`.
+Tags can double up. `%@_Example_@%`.
+
+They even `%@_go between
+lots
+and lots
+of lines_@%`
+
+Create line divisions with metadata
+[div]
+
+Insert linebreaks too
+
+
+Create links with metadata:
+[link Scala http://www.scala-lang.org/]
+
+And images as well:
+[img https://assets.toptal.io/uploads/blog/category/logo/55/scala.png]
+
+(You'll have to look in the html for these)
+Gibberish metadata is ignored completely:
+[gqwnaifnaifnaanwaidaidadgbveig3fnawnfif1r]
+
+So you can write 'comments' with this functionality
+[Easter egg!]
+
+But missued keywords will return errors
+[link mary had a little lamb]
