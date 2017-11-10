@@ -1,0 +1,1 @@
+go build -v -o ..\build\enaml.exe ..\enaml.go

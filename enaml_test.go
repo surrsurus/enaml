@@ -1,4 +1,4 @@
-package enaml
+package main
 
 import (
 	"reflect"
@@ -56,7 +56,7 @@ func TestChangeExtension(t *testing.T) {
 func TestLoad(t *testing.T) {
 
 	// Paths and expected contents we will be using throughout the tests
-	dummyPaths := []string{"./src/dummydata/first.enaml", "./src/dummydata/second.enaml"}
+	dummyPaths := []string{"./test/first.enaml", "./test/second.enaml"}
 
 	// Expected contents of first.enaml
 	firstContents := []string{"[First]", "", "_@%data%@_"}
@@ -92,14 +92,50 @@ func TestLoad(t *testing.T) {
 
 }
 
+func TestLoadPanics(t *testing.T) {
+
+	// Test loading bad files
+	_, err := Load("/bad/file/extension/should/not/exist")
+	if err == nil {
+		t.Errorf("Load should have resulted in an error")
+	}
+
+	defer func() {
+		{
+			if r := recover(); r == nil {
+				t.Errorf("The code did not panic")
+			}
+		}
+	}()
+
+	MassLoad([]string{"/bad/file", "other/bad/file"})
+
+}
+func TestSavePanics(t *testing.T) {
+
+	defer func() {
+		{
+			if r := recover(); r == nil {
+				t.Errorf("The code did not panic")
+			}
+		}
+	}()
+
+	MassSave([][]string{{"/bad/file"}}, []string{".dummy", ".will cause error on compare"})
+	MassSave([][]string{{"/bad/file"}}, []string{".will cause error on save"})
+	MassSave([][]string{{"/bad/file"}}, []string{})
+	MassSave([][]string{{}}, []string{})
+
+}
+
 // TestSave will test the Save and MassSave functions of osfile
 func TestSave(t *testing.T) {
 
 	// Dummy input paths
-	dummyPaths := []string{"./src/dummydata/first.enaml", "./src/dummydata/second.enaml"}
+	dummyPaths := []string{"./test/first.enaml", "./test/second.enaml"}
 
 	// Dummy output paths
-	dummySavePaths := []string{"./src/dummydata/first.html", "./src/dummydata/second.html"}
+	dummySavePaths := []string{"./test/first.html", "./test/second.html"}
 
 	// Test saving one file
 	dummyContent, _ := Load(dummyPaths[0])
@@ -111,5 +147,53 @@ func TestSave(t *testing.T) {
 	// Test saving many files
 	dummyContents := MassLoad(dummyPaths)
 	MassSave(dummyContents, dummySavePaths)
+
+}
+
+// TestTranslate will test both `Translate()` and `MassTranslate()`
+func TestTranslate(t *testing.T) {
+	// Averages at about 160k~ ns. Could be better
+	files := [][]string{
+		{"[Test Enaml 1]", "`_@%Hello World %@_`", "# H", "## e", "### l", "#### l", "##### o", "###### ."},
+		{"[Test Enaml 2]", "> Blockquote", "- Bullet", "Normal Text"},
+		{"[Test Enaml 3]", "[div]", "[div]", "[div]", "[div]", "[div]", "[div]", "[div]"},
+		{"[Test Enaml 4]", "# Bad metadata", "[link bad line]", "[img bad img]"},
+		{"Test Enaml 5, No Title", "Unclosed Tests @_`%"},
+		{"Test Enaml 6, No Title, Blank lines", ""},
+		{"Test Enaml 7, No Title", "[link Scala http://www.scala-lang.org/]", "[img https://assets.toptal.io/uploads/blog/category/logo/55/scala.png]"},
+		{"Test Enaml 8, No Title", "[comment]"},
+	}
+
+	// Test MassTranslate
+	MassTranslate(files)
+
+}
+
+// BENCHMARKS
+// --------------------------------------------------------------
+
+func BenchmarkFull(b *testing.B) {
+
+	for i := 0; i < b.N; i++ {
+		TranslateArgv([]string{"./test/first.enaml", "./test/second.enaml"})
+	}
+
+}
+
+func TestFull(t *testing.T) {
+	TranslateArgv([]string{"./test/first.enaml", "./test/second.enaml"})
+}
+
+func TestFullPanic(t *testing.T) {
+
+	defer func() {
+		{
+			if r := recover(); r == nil {
+				t.Errorf("The code did not panic")
+			}
+		}
+	}()
+
+	TranslateArgv([]string{})
 
 }
