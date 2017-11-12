@@ -22,7 +22,9 @@ Enaml was originally made for a user to take efficient notes quickly using this 
 
 3. Run 
 
-```go build``` 
+```
+go build
+``` 
 
 in the root directory of enaml.
 
@@ -32,7 +34,9 @@ in the root directory of enaml.
 
 3. Run 
 
-```go build``` 
+```
+go build
+``` 
 
 in the root directory of enaml.
 
@@ -48,11 +52,15 @@ In addition, you could also run `go test` in the root enaml directory.
 
 The `examples` folder has many examples. The file `syntax by example.enaml` details the whole syntax for the enaml-interpretable markup language. By running 
 
-```enaml.exe "examples\syntax by example.enaml"```
+```
+enaml.exe "examples\syntax by example.enaml"
+```
 
  on windows or 
  
- ```enaml "examples/syntax by example.enaml"``` 
+ ```
+ enaml "examples/syntax by example.enaml"
+ ``` 
  
  on linux/osx, you will generate a rendered enaml file as html in the `examples` directory.
 
