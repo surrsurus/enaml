@@ -10,6 +10,8 @@ Enaml was originally made for a user to take efficient notes quickly using this 
 
 ## Getting Started
 
+Here's how to set up enaml on your computer.
+
 ### Prerequisites
 
 1. Install [go-1.9](https://golang.org/dl/) on your OS of choice and make sure the `go` executable is in your PATH.
