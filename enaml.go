@@ -428,14 +428,14 @@ func TranslateArgv(paths []string) {
 	}
 
 	// Load files
-	files := [][]string{}
-	files = MassLoad(paths)
+	// files := [][]string{}
+	files := MassLoad(paths)
 
 	// Change extensions from whatever to html
 	newPaths := MassChangeExtension(paths, ".html")
 
-	translatedFiles := [][]string{}
-	translatedFiles = MassTranslate(files)
+	// translatedFiles := [][]string{}
+	translatedFiles := MassTranslate(files)
 
 	// Save contents
 	MassSave(translatedFiles, newPaths)
