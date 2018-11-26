@@ -1,4 +1,4 @@
-# enaml [![Build Status](https://travis-ci.org/surrsurus/enaml.svg?branch=master)](https://travis-ci.org/surrsurus/enaml) ![Golang Version](https://img.shields.io/badge/golang-v1.9-green.svg) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) 
+# enaml [![Build Status](https://travis-ci.org/surrsurus/enaml.svg?branch=master)](https://travis-ci.org/surrsurus/enaml) [![Go Report Card](https://goreportcard.com/badge/github.com/surrsurus/enaml)](https://goreportcard.com/report/github.com/surrsurus/enaml) ![Golang Version](https://img.shields.io/badge/golang-v1.9-green.svg) [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) 
 
 **E**naml is **N**ot **A** **M**arkup **L**anguage
 
