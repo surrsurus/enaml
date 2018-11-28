@@ -150,7 +150,7 @@ func TestSave(t *testing.T) {
 
 }
 
-// TestTranslate will test both `Translate()` and `MassTranslate()`
+// TestTranslate will test both `Translate()` and `MassTranslate()` as well as `Populate()`
 func TestTranslate(t *testing.T) {
 	// Averages at about 160k~ ns. Could be better
 	files := [][]string{

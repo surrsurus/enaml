@@ -14,7 +14,7 @@ Here's how to set up enaml on your computer.
 
 ### Prerequisites
 
-1. Install [go-1.9](https://golang.org/dl/) on your OS of choice and make sure the `go` executable is in your PATH.
+1. Install [go-1.9 or later](https://golang.org/dl/) on your OS of choice and make sure the `go` executable is in your PATH.
 
 2. Download the latest master, and extract the zip or tarball
 

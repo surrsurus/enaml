@@ -52,7 +52,21 @@ const (
 	HTMLTAIL = `	  </div>
   </body>
 </html>`
+
 )
+
+// Compile some regexes needed for checking markup
+
+// Check headers, anything from 1 to 6 `#` at the start of the string
+var regexHeader, _ = regexp.Compile("^#{1,6}")
+// Check blockquotes, get the first `>` at the start of the string
+var regexBlockquote, _ = regexp.Compile("^>{1}")
+// Check bullets, get the first `-` at the start of the string
+var regexBullet, _ = regexp.Compile("^-{1}")
+// Check brackets, get everything between `[` and `]`
+// TODO: Needs to just return stuff between brackets
+var regexBrackets, _ = regexp.Compile("\\[(.*?)\\]")
+
 
 // FILE UTILITIES
 // --------------------------------------------------------------
@@ -174,6 +188,93 @@ func Load(path string) ([]string, error) {
 // TRANSLATION
 // --------------------------------------------------------------
 
+
+/*
+Populate tags in the HTML
+*/ 
+func Populate(translatedFile []string, translatedLine []string) {
+
+	// Save changes to the real line
+	line := strings.Join(translatedLine[:], "")
+
+	// Start checking the beginning of every line
+	
+	if strings.HasPrefix(line, "#") {
+	
+		// Headers
+		match := regexHeader.FindAllString(line, -1)
+		header := match[0]
+	
+		translatedFile = append(translatedFile, fmt.Sprintf("      <h%d>%s</h%d>", len(header), line[len(header)+1:], len(header)))
+	
+	} else if strings.HasPrefix(line, ">") {
+	
+		// Blockquotes
+		match := regexBlockquote.FindAllString(line, -1)
+		blockquote := match[0]
+	
+		translatedFile = append(translatedFile, fmt.Sprintf("      <blockquote>%s</blockquote>", line[len(blockquote)+1:]))
+	
+	} else if strings.HasPrefix(line, "-") {
+	
+		// Bullets
+		match := regexBullet.FindAllString(line, -1)
+		bullet := match[0]
+	
+		translatedFile = append(translatedFile, fmt.Sprintf("      <ul><li>%s</li></ul>", line[len(bullet)+1:]))
+	
+	} else if strings.HasPrefix(line, "[") {
+	
+		// Bracket metadata
+	
+		trimmedLine := line[1 : len(line)-1]
+		args := strings.Split(trimmedLine, " ")
+	
+		if args[0] == "img" {
+	
+			// [img ...]
+			if len(args) != 2 {
+				translatedFile = append(translatedFile, "      <p style='color:red'><b>Error: Image metadata has improper syntax</b></p>")
+			} else {
+				translatedFile = append(translatedFile, "      <img src="+args[1]+">")
+			}
+	
+		} else if args[0] == "div" {
+	
+			// [div]
+			translatedFile = append(translatedFile, "      <hr>")
+	
+		} else if args[0] == "link" {
+	
+			// [link ...]
+			if len(args) != 3 {
+				translatedFile = append(translatedFile, "      <p style='color:red'><b>Error: Link metadata has improper syntax</b></p>")
+			} else {
+				translatedFile = append(translatedFile, "      <a href="+args[2]+">"+args[1]+"</a>")
+			}
+	
+		}
+	
+	} else {
+	
+		// Most common cases handled here
+	
+		if line == "" {
+	
+			// Empty lines become breaks in the HTML
+			translatedFile = append(translatedFile, "      </br>")
+	
+		} else {
+	
+			// Otherwise always update the translated File with the line
+			translatedFile = append(translatedFile, "      <p>"+line+"</p>")
+	
+		}
+	
+	}
+
+}
+
 /*
 Translate will turn enaml markup to HTML.
 The input is expected to be a string slice where each element corresponds to each line of a file,
@@ -182,18 +283,6 @@ The resulting output will be a string slice of the same length as the input, tho
 will have been rendered from enaml markup to HTML
 */
 func Translate(file []string) []string {
-
-	// Compile some regexes needed for checking markup
-
-	// Check headers, anything from 1 to 6 `#` at the start of the string
-	regexHeader, _ := regexp.Compile("^#{1,6}")
-	// Check blockquotes, get the first `>` at the start of the string
-	regexBlockquote, _ := regexp.Compile("^>{1}")
-	// Check bullets, get the first `-` at the start of the string
-	regexBullet, _ := regexp.Compile("^-{1}")
-	// Check brackets, get everything between `[` and `]`
-	// TODO: Needs to just return stuff between brackets
-	regexBrackets, _ := regexp.Compile("\\[(.*?)\\]")
 
 	// Where all rendered markup will be sent to
 	translatedFile := []string{}
@@ -278,84 +367,8 @@ func Translate(file []string) []string {
 			}
 		}
 
-		// Save changes to the real line
-		line = strings.Join(translatedLine[:], "")
-
-		// Start checking the beginning of every line
-
-		if strings.HasPrefix(line, "#") {
-
-			// Headers
-			match := regexHeader.FindAllString(line, -1)
-			header := match[0]
-
-			translatedFile = append(translatedFile, fmt.Sprintf("      <h%d>%s</h%d>", len(header), line[len(header)+1:], len(header)))
-
-		} else if strings.HasPrefix(line, ">") {
-
-			// Blockquotes
-			match := regexBlockquote.FindAllString(line, -1)
-			blockquote := match[0]
-
-			translatedFile = append(translatedFile, fmt.Sprintf("      <blockquote>%s</blockquote>", line[len(blockquote)+1:]))
-
-		} else if strings.HasPrefix(line, "-") {
-
-			// Bullets
-			match := regexBullet.FindAllString(line, -1)
-			bullet := match[0]
-
-			translatedFile = append(translatedFile, fmt.Sprintf("      <ul><li>%s</li></ul>", line[len(bullet)+1:]))
-
-		} else if strings.HasPrefix(line, "[") {
-
-			// Bracket metadata
-
-			trimmedLine := line[1 : len(line)-1]
-			args := strings.Split(trimmedLine, " ")
-
-			if args[0] == "img" {
-
-				// [img ...]
-				if len(args) != 2 {
-					translatedFile = append(translatedFile, "      <p style='color:red'><b>Error: Image metadata has improper syntax</b></p>")
-				} else {
-					translatedFile = append(translatedFile, "      <img src="+args[1]+">")
-				}
-
-			} else if args[0] == "div" {
-
-				// [div]
-				translatedFile = append(translatedFile, "      <hr>")
-
-			} else if args[0] == "link" {
-
-				// [link ...]
-				if len(args) != 3 {
-					translatedFile = append(translatedFile, "      <p style='color:red'><b>Error: Link metadata has improper syntax</b></p>")
-				} else {
-					translatedFile = append(translatedFile, "      <a href="+args[2]+">"+args[1]+"</a>")
-				}
-
-			}
-
-		} else {
-
-			// Most common cases handled here
-
-			if line == "" {
-
-				// Empty lines become breaks in the HTML
-				translatedFile = append(translatedFile, "      </br>")
-
-			} else {
-
-				// Otherwise always update the translated File with the line
-				translatedFile = append(translatedFile, "      <p>"+line+"</p>")
-
-			}
-
-		}
+		// Populate other tags
+		Populate(translatedFile, translatedLine);
 
 	}
 
