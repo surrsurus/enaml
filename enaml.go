@@ -227,6 +227,7 @@ func Boilerplate(file []string) []string {
 
 }
 
+// CloseTags of special instances for a file.
 func CloseTags(openBold bool, openCode bool, openItalics bool, openUnderline bool, translatedFile []string) []string {
 
 	// Copy translated file
