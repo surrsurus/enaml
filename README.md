@@ -14,7 +14,7 @@ Here's how to set up enaml on your computer.
 
 ### Prerequisites
 
-1. Install [go-1.9 or later](https://golang.org/dl/) on your OS of choice and make sure the `go` executable is in your PATH.
+1. Install [go-1.6 or later](https://golang.org/dl/) on your OS of choice and make sure the `go` executable is in your PATH.
 
 2. Download the latest master, and extract the zip or tarball
 
@@ -46,7 +46,7 @@ in the root directory of enaml.
 
 ### Running the Tests
 
-Run the full test suite, benchmarks, and check code coverage by running either `win-test.bat` on windows or `linux-run.sh` on linux in the root directory.
+Run the full test suite, benchmarks, and check code coverage by running either `win-test.bat` on windows or `linux-run.sh` on linux in the root directory. One does not exist for OSX yet.
 
 In addition, you could also run `go test` in the root enaml directory.
 
