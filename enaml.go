@@ -189,9 +189,45 @@ func Load(path string) ([]string, error) {
 // TRANSLATION
 // --------------------------------------------------------------
 
-/*
-Populate tags in the HTML
-*/
+// Add boilerplate
+func Boilerplate(file []string) []string {
+
+	// Check to see if there is a title. A tile is written in the form of `[title]`
+	// at the beginning of the file so we see if our bracket regex returns any matches
+	// for the first line of the file (file[0])
+	match := regexBrackets.FindAllString(file[0], -1)
+
+	// Create empty translated file
+	translatedFile := []string{}
+
+	// If len(match) > 0, we have a title
+	if len(match) > 0 {
+
+		// Comb through the boilerplate to find the `<title></title>` and insert our title there
+		for _, line := range addHeadWithTitle(match[0][1 : len(match[0])-1]) {
+			translatedFile = append(translatedFile, line)
+		}
+
+		// Add a nice little header to the start of the HTML file
+		translatedFile = append(translatedFile, "      <h1>"+match[0][1:len(match[0])-1]+"</h1>")
+
+		// Remove the first line of the file
+		file = file[1:]
+
+	} else {
+
+		// Otherwise use the standard title
+		for _, line := range addHeadWithTitle("enaml") {
+			translatedFile = append(translatedFile, line)
+		}
+
+	}
+
+	return translatedFile
+
+}
+
+// Populate tags in the HTML
 func Populate(translatedFile []string, translatedLine []string) []string {
 
 	// Save changes to the real line
@@ -289,38 +325,8 @@ will have been rendered from enaml markup to HTML
 */
 func Translate(file []string) []string {
 
-	// Where all rendered markup will be sent to
-	translatedFile := []string{}
-
 	// Add the html head boilerplate
-
-	// Check to see if there is a title. A tile is written in the form of `[title]`
-	// at the beginning of the file so we see if our bracket regex returns any matches
-	// for the first line of the file (file[0])
-	match := regexBrackets.FindAllString(file[0], -1)
-
-	// If len(match) > 0, we have a title
-	if len(match) > 0 {
-
-		// Comb through the boilerplate to find the `<title></title>` and insert our title there
-		for _, line := range addHeadWithTitle(match[0][1 : len(match[0])-1]) {
-			translatedFile = append(translatedFile, line)
-		}
-
-		// Add a nice little header to the start of the HTML file
-		translatedFile = append(translatedFile, "      <h1>"+match[0][1:len(match[0])-1]+"</h1>")
-
-		// Remove the first line of the file
-		file = file[1:]
-
-	} else {
-
-		// Otherwise use the standard title
-		for _, line := range addHeadWithTitle("enaml") {
-			translatedFile = append(translatedFile, line)
-		}
-
-	}
+	translatedFile := Boilerplate(file);
 
 	// Keep track of what tags become opened on each line
 	// Keep these outside of the loop so they can persist between lines
