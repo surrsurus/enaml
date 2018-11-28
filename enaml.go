@@ -189,7 +189,7 @@ func Load(path string) ([]string, error) {
 // TRANSLATION
 // --------------------------------------------------------------
 
-// Add boilerplate
+// Boilerplate creates a string slice with html header data for use in Translate()
 func Boilerplate(file []string) []string {
 
 	// Check to see if there is a title. A tile is written in the form of `[title]`
@@ -224,6 +224,32 @@ func Boilerplate(file []string) []string {
 	}
 
 	return translatedFile
+
+}
+
+func CloseTags(openBold bool, openCode bool, openItalics bool, openUnderline bool, translatedFile []string) []string {
+
+	// Copy translated file
+	file := translatedFile
+
+	// Always close your tags
+	if openBold {
+		file = append(file, "</b>")
+	}
+
+	if openCode {
+		file = append(file, "</code>")
+	}
+
+	if openItalics {
+		file = append(file, "</i>")
+	}
+
+	if openUnderline {
+		file = append(file, "</u>")
+	}
+
+	return file
 
 }
 
@@ -326,7 +352,7 @@ will have been rendered from enaml markup to HTML
 func Translate(file []string) []string {
 
 	// Add the html head boilerplate
-	translatedFile := Boilerplate(file);
+	translatedFile := Boilerplate(file)
 
 	// Keep track of what tags become opened on each line
 	// Keep these outside of the loop so they can persist between lines
@@ -383,22 +409,8 @@ func Translate(file []string) []string {
 
 	}
 
-	// Always close your tags
-	if openBold {
-		translatedFile = append(translatedFile, "</b>")
-	}
-
-	if openCode {
-		translatedFile = append(translatedFile, "</code>")
-	}
-
-	if openItalics {
-		translatedFile = append(translatedFile, "</i>")
-	}
-
-	if openUnderline {
-		translatedFile = append(translatedFile, "</u>")
-	}
+	// Close tags
+	translatedFile = CloseTags(openBold, openCode, openItalics, openUnderline, translatedFile)
 
 	// Add tail boilerplate
 	translatedFile = append(translatedFile, HTMLTAIL)
